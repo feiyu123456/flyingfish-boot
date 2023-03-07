@@ -2,3 +2,5 @@
 /flyingfish-boot.iml
 /logs
 /target
+/Dockerfile
+/*.jar

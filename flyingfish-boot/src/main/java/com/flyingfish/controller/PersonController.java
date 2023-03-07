@@ -4,23 +4,24 @@ import com.flyingfish.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @author jianping.yu@karakal.com.cn
  * @version 1.0
  * @date 2023/2/16
  **/
-@Controller
-@Scope("prototype")
+@RestController
+@RequestMapping("/person")
+@Scope(value = "prototype")
 public class PersonController {
 
-    @Autowired
+    @Resource
     private TestService testService;
 
-    @RequestMapping("/query")
-    @ResponseBody
+    @GetMapping("/query")
     public String getPerson() {
         String data = testService.doTrade();
         System.out.println("service属性：" + data);
