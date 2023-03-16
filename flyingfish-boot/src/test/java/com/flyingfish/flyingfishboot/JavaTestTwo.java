@@ -2,11 +2,14 @@ package com.flyingfish.flyingfishboot;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.StampedLock;
 
 /**
  * @author jianping.yu@karakal.com.cn
@@ -17,6 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class JavaTestTwo {
 
     private static ReentrantLock reentrantLock = new ReentrantLock();
+
     static final Object lock = new Object();
     static boolean t2Run = false;
     
@@ -151,10 +155,6 @@ public class JavaTestTwo {
         t2.start();
     }
 
-    public static void main(String[] args) throws InterruptedException {
-          test8();
-    }
-
     static Condition waitCigaretteQueue = reentrantLock.newCondition();
     static Condition waitbreakfastQueue = reentrantLock.newCondition();
     static volatile boolean hasCigrette = false;
@@ -217,4 +217,137 @@ public class JavaTestTwo {
         }
     }
 
+    public static void heapTests() throws InterruptedException {
+        List<JavaTestTwo> heapTests = new ArrayList<>();
+        while (true) {
+            heapTests.add(new JavaTestTwo());
+            Thread.sleep(10);
+        }
+    }
+
+    public static void testThreadPool() throws ExecutionException, InterruptedException {
+        ExecutorService pool = Executors.newFixedThreadPool(2, new ThreadFactory() {
+            private AtomicInteger t = new AtomicInteger(1);
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "myPool_t" + t.getAndIncrement());
+            }
+        });
+
+        pool.execute(() -> {
+             log.debug("1");
+        });
+
+        pool.execute(() -> {
+            log.debug("2");
+        });
+
+        pool.execute(() -> {
+            log.debug("3");
+        });
+
+        Future<String> future = pool.submit(() -> {
+            log.debug("running...");
+            Thread.sleep(1000);
+            return "ok";
+        });
+
+        Future<?> futureTwo = pool.submit(() -> {log.debug("runnable run ....");return "hello";});
+
+        log.debug(future.get());
+        log.debug((String) futureTwo.get());
+    }
+
+    static boolean flagTwo = false;
+    public static void main(String[] args) throws InterruptedException {
+//        testCachedThreadPool();
+        Condition condition = reentrantLock.newCondition();
+        new Thread(() ->{
+            reentrantLock.lock();
+            try {
+                log.debug("t1 start....");
+                while (!flagTwo){
+                    log.debug("t1 await....");
+                    condition.await();
+                    log.debug("t1 end....");
+                }
+                if (flagTwo) log.debug("t1 doing.....");
+                log.debug("t1 doing....");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                reentrantLock.unlock();
+            }
+        }, "t1").start();
+
+        new Thread(() ->{
+             reentrantLock.lock();
+             try {
+                 log.debug("t2 start....");
+                  while (!flagTwo) {
+                      Thread.sleep(2000);
+                      flagTwo = true;
+                  }
+                  if (flagTwo) condition.signal();
+                  log.debug("t2 end....");
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             } finally {
+                 reentrantLock.unlock();
+             }
+        }, "t2").start();
+
+        StampedLock stampedLock = new StampedLock();
+    }
+
+    public static void testFixedThreadPool() {
+        //fixed thread number
+        Executor fixedPool = Executors.newFixedThreadPool(2, new ThreadFactory() {
+            private AtomicInteger t = new AtomicInteger(0);
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "pool-" + t.incrementAndGet());
+            }
+        });
+        fixedPool.execute(() -> log.debug("task one!"));
+        fixedPool.execute(() -> log.debug("task two!"));
+        fixedPool.execute(() -> log.debug("task three!"));
+    }
+
+    //not have coreThread
+    public static void testCachedThreadPool() {
+        final Object object = new Object();
+        ThreadPoolExecutor cachedThreadPool = (ThreadPoolExecutor) Executors.newCachedThreadPool(new ThreadFactory() {
+             private AtomicInteger t = new AtomicInteger(0);
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "thread-" + t.incrementAndGet());
+            }
+        });
+        //cachedThreadPool.setCorePoolSize();
+        for (int i = 0; i < 100; i++) {
+            int finalI = i;
+            cachedThreadPool.execute(() -> {
+                //synchronized (object) {
+                    log.debug("task {}", finalI +1);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                //}
+            });
+        }
+    }
+
+
+
+}
+
+class MyTask extends RecursiveTask<String> {
+
+    @Override
+    protected String compute() {
+        return null;
+    }
 }
