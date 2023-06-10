@@ -20,33 +20,6 @@ public class JavaTestTwo {
     static final Object lock = new Object();
     static boolean t2Run = false;
     
-    public void test1() throws InterruptedException{
-        Thread t1 = new Thread(() -> {
-            log.debug("尝试获取锁。。。");
-            try {
-                if (!reentrantLock.tryLock(1, TimeUnit.SECONDS)) {
-                    log.debug("获取不到锁");
-                    return;
-                }
-            } catch (InterruptedException e) {
-                log.debug("获取不到锁");
-                e.printStackTrace();
-                return;
-            }
-
-            try {
-                log.debug("获得到锁");
-            } finally {
-                reentrantLock.unlock();
-            }
-        }, "t1");
-
-        reentrantLock.lock();
-        log.debug("获得到锁");
-        t1.start();
-        reentrantLock.unlock();
-        TimeUnit.SECONDS.sleep(1);
-    }
 
     //固定运行顺序-wait-ify
     public static void test2() {
