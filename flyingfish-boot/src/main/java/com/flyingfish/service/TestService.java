@@ -1,5 +1,7 @@
 package com.flyingfish.service;
 
+import com.flyingfish.interfacecustom.TestInterface;
+import org.junit.Test;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @Scope("prototype")
-public class TestService {
+public class TestService implements TestInterface {
 
     private static ThreadLocal<Integer> local = new ThreadLocal<Integer>() {
         @Override
@@ -22,5 +24,15 @@ public class TestService {
     public String doTrade() {
         Integer integer = local.get();
         return Integer.toString(integer++);
+    }
+
+    @Override
+    public void testOne() {
+         TestInterface.testTwo();
+    }
+
+    @Test
+    public void test(){
+         testOne();
     }
 }
