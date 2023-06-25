@@ -1,0 +1,7 @@
+/.idea
+/flyingfish-boot.iml
+/logs
+/target
+/Dockerfile
+/*.jar
+/src/main/resources/application-dev.properties
