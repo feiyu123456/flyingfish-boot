@@ -10,10 +10,7 @@ import org.yaml.snakeyaml.util.ArrayUtils;
 
 import java.sql.Array;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -514,6 +511,95 @@ public class MianShiTest {
             i[j] = v.pop();
         }
         return i;
+    }
+
+    /**
+     * 给一个带符号，小数点的字符串判断是否可以转成数字
+     * @param str
+     * @return
+     */
+    public boolean isNumbers(String str) {
+        boolean flag = false;
+        if (str.lastIndexOf("+") >0 || str.lastIndexOf("-") >0) return false;
+        //System.out.println(str.lastIndexOf("-"));
+        //是否为整数
+        if (str.replace("-", "").replace("+", "").matches("^[0-9]+$]")) {
+            flag = true;
+        }
+        if (str.replace("-", "").replace("+", "").matches("\\d+.\\d+")) {
+            flag = true;
+        }
+        return flag;
+    }
+
+    /**
+     * 给一个整数钱n，给出所有由零钱2，3，5凑整n的方案数。
+     * @param n
+     * @return
+     */
+    public int getCount (int n) {
+        int nums = 0;
+        if (n%2==0) nums++;
+        if (n%3==0) nums++;
+        if (n%5==0) nums++;
+        if (n%2%3==0) nums++;
+        if (n%2%5==0) nums++;
+        if (n%3%5==0) nums++;
+        if (n%5%3==0) nums++;
+        if (n%5%2==0) nums++;
+        if (n%3%2==0) nums++;
+        if (n%2%3%5==0) nums++;
+        if (n%2%5%3==0) nums++;
+        if (n%5%3%2==0) nums++;
+        if (n%5%2%3==0) nums++;
+        if (n%3%2%5==0) nums++;
+        if (n%3%5%2==0) nums++;
+        return nums;
+    }
+
+
+
+    public int getCase(int n) {
+        Integer f1 = 50, f2 = 50, f3 = 150, f4 = 150;
+        int result = 0;
+        int i = n;
+        switch (i) {
+            case 1:
+                result = result + i * 1;
+            case 2:
+                result = result + i * 2;
+            case 3:
+                result = result + i * 3;
+        }
+        System.out.println(f1 == f2);
+        System.out.println(f3 == f4);
+        return result;
+    }
+
+
+
+    @Test
+    public void testIsNumber() {
+        //System.out.println(isNumbers("-123.567"));
+        //System.out.println(getCount(12));
+
+
+        System.out.println(getCase(2));
+    }
+
+    @Test
+    public void testConcurrentHashMap() {
+
+        ConcurrentHashMap<Integer, String> map = new ConcurrentHashMap<>();
+        map.put(1, "tim");
+        map.put(2, "tom");
+
+        String i1 = map.put(1, "paul");
+        String i2 = map.putIfAbsent(3, "jack");
+
+        System.out.println(map.get(3));
+        System.out.println(i1);
+        System.out.println(i2);
     }
 
 }

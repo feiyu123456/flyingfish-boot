@@ -111,11 +111,12 @@ public class JavaTestTwo {
 
     public static void other(){
         new Thread(() -> {
-            log.debug("A to B  === {}", reference.compareAndSet("A", "B"));
-        }, "t1").start();
-        new Thread(() -> {
             log.debug("B to A  === {}", reference.compareAndSet("B", "A"));
         }, "t2").start();
+        new Thread(() -> {
+            log.debug("A to B  === {}", reference.compareAndSet("A", "B"));
+        }, "t1").start();
+
     }
 
     public final static Object a = new Object();
@@ -261,43 +262,45 @@ public class JavaTestTwo {
     static boolean flagTwo = false;
     public static void main(String[] args) throws InterruptedException {
 //        testCachedThreadPool();
-        Condition condition = reentrantLock.newCondition();
-        new Thread(() ->{
-            reentrantLock.lock();
-            try {
-                log.debug("t1 start....");
-                while (!flagTwo){
-                    log.debug("t1 await....");
-                    condition.await();
-                    log.debug("t1 end....");
-                }
-                if (flagTwo) log.debug("t1 doing.....");
-                log.debug("t1 doing....");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                reentrantLock.unlock();
-            }
-        }, "t1").start();
+//        Condition condition = reentrantLock.newCondition();
+//        new Thread(() ->{
+//            reentrantLock.lock();
+//            try {
+//                log.debug("t1 start....");
+//                while (!flagTwo){
+//                    log.debug("t1 await....");
+//                    condition.await();
+//                    log.debug("t1 end....");
+//                }
+//                if (flagTwo) log.debug("t1 doing.....");
+//                log.debug("t1 doing....");
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } finally {
+//                reentrantLock.unlock();
+//            }
+//        }, "t1").start();
+//
+//        new Thread(() ->{
+//             reentrantLock.lock();
+//             try {
+//                 log.debug("t2 start....");
+//                  while (!flagTwo) {
+//                      Thread.sleep(2000);
+//                      flagTwo = true;
+//                  }
+//                  if (flagTwo) condition.signal();
+//                  log.debug("t2 end....");
+//             } catch (InterruptedException e) {
+//                 e.printStackTrace();
+//             } finally {
+//                 reentrantLock.unlock();
+//             }
+//        }, "t2").start();
+//
+//        StampedLock stampedLock = new StampedLock();
 
-        new Thread(() ->{
-             reentrantLock.lock();
-             try {
-                 log.debug("t2 start....");
-                  while (!flagTwo) {
-                      Thread.sleep(2000);
-                      flagTwo = true;
-                  }
-                  if (flagTwo) condition.signal();
-                  log.debug("t2 end....");
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
-             } finally {
-                 reentrantLock.unlock();
-             }
-        }, "t2").start();
-
-        StampedLock stampedLock = new StampedLock();
+        test2();
     }
 
     public static void testFixedThreadPool() {

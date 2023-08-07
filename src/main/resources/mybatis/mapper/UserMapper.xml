@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyingfish.interfacecustom.UserMapper">
+    <select id="queryUserList" resultType="User">
+        select * from t_user
+
+    </select>
+
+    <select id="queryUserById" resultType="User">
+        select *
+        from t_user
+        where id=#{id};
+    </select>
+
+    <insert id="addUser" parameterType="User">
+        insert into t_user(id,username,password,fullName,mobile)
+        values(#{id},#{username},#{password},#{fullName},#{mobile});
+
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+        update t_user
+        set username=#{username},password=#{password}
+        where id=#{id};
+    </update>
+
+    <delete id="deleteUser" parameterType="string">
+        delete
+        from t_user
+        where id=#{id};
+
+    </delete>
+
+</mapper>

@@ -42,7 +42,7 @@ public class JavaTest {
 //        log.debug("interrupt...");
 //        thread.interrupt();
 
-        test4();
+        test3();
     }
 
     public void test1() throws InterruptedException {
