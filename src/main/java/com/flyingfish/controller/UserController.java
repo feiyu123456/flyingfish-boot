@@ -3,6 +3,7 @@ package com.flyingfish.controller;
 import com.flyingfish.interfacecustom.UserMapper;
 import com.flyingfish.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -18,6 +19,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
+    @Qualifier(value = "userMapper")
     private UserMapper userMapper;
 
     @GetMapping("/queryUserList")

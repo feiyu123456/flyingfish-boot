@@ -24,7 +24,7 @@ public class TestFuture {
         FutureTask<String> future = new FutureTask<String>(call);
         new Thread(future).start();
         try {
-            System.out.println(future.get(1, TimeUnit.MILLISECONDS));
+            System.out.println(future.get(3, TimeUnit.MILLISECONDS));
         } catch (TimeoutException e) {
             System.out.println(e.getMessage());
         }

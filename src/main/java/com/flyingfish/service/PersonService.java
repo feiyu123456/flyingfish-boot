@@ -2,7 +2,7 @@ package com.flyingfish.service;
 
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class PersonService {
 
 }

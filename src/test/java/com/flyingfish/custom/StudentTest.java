@@ -7,7 +7,16 @@ package com.flyingfish.custom;
  **/
 public class StudentTest {
     public static void main(String[] args) {
-        new Student();
+        //new Student();
         //System.out.println(Person.arg01);
+//        String a = new String("lisi");
+//        String b = a.intern();
+//        System.out.println(a == b);
+
+        String a = "li";
+        String b = a + "zhi";
+        String d = new String("lizhi");
+        // 结果为true
+        System.out.println(b == d);
     }
 }

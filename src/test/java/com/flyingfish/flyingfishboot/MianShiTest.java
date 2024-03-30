@@ -1,17 +1,9 @@
 package com.flyingfish.flyingfishboot;
 
-import ch.qos.logback.core.pattern.ConverterUtil;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
-import org.assertj.core.util.Sets;
-import org.junit.Test;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
-import org.yaml.snakeyaml.util.ArrayUtils;
 
-import java.sql.Array;
+import org.junit.Test;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author jianping.yu@karakal.com.cn
@@ -584,7 +576,11 @@ public class MianShiTest {
         //System.out.println(getCount(12));
 
 
-        System.out.println(getCase(2));
+        //System.out.println(getCase(2));
+        String str2 = new String("str")+new String("01");//常量池创建"str"和"01"常量，堆中创建"str01"常量  ** 区别于：new String("str01") 堆中创建"str01",常量池创建"str01"两个引用地址不一样
+        str2.intern();//将在堆上的地址引用复制到常量池
+        String str1 = "str01";
+        System.out.println(str2==str1);
     }
 
     @Test
