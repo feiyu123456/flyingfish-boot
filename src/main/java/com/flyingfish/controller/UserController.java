@@ -2,15 +2,18 @@ package com.flyingfish.controller;
 
 import com.flyingfish.interfacecustom.UserMapper;
 import com.flyingfish.pojo.User;
+import com.flyingfish.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.applet.AppletContext;
 import java.util.List;
 
@@ -22,18 +25,27 @@ public class UserController {
     @Qualifier(value = "userMapper")
     private UserMapper userMapper;
 
+    @Resource
+    private IUserService userService;
+
+    @Resource
+    private ApplicationContext applicationContext;
+
     @GetMapping("/queryUserList")
     public List<User> queryUserList() {
         List<User> userList = userMapper.queryUserList();
         return userList;
     }
 
-    @Cacheable(value = "userCache", key = "#id", unless = "#result == null")
+    //@Cacheable(value = "userCache", key = "#id", unless = "#result == null")
     @GetMapping("/queryUserById/{id}")
     public User queryUserById(@PathVariable String id){
-        User user = userMapper.queryUserById(id);
-        System.out.println("==========================>" + user.toString());
-        return user;
+//        User user = userMapper.queryUserById(id);
+//        System.out.println("==========================>" + user.toString());
+//        return user;
+        System.out.println(applicationContext.containsBean("personController"));
+        //System.out.println(applicationContext.containsBean("personController"));
+        return userService.queryUserById(id);
     }
 
     @CachePut(value = "userCache", key = "#user.id")

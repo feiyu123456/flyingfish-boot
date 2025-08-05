@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  * @date 2023/2/16
  **/
-@Service
+//@Service
 @Scope("prototype")
 public class TestService implements TestInterface {
 

@@ -1,14 +1,17 @@
 package com.flyingfish.proxy.interfacecustom;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class HelloServiceImpl implements HelloService{
 
     @Override
     public void sayHello(String name) {
-        System.out.println("Hello " + name);
+        log.info("Hello " + name);
     }
 
     @Override
     public void sayNo(String name) {
-        System.out.println("no " + name);
+        log.info("no " + name);
     }
 }

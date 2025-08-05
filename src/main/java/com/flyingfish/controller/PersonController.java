@@ -13,9 +13,10 @@ import javax.annotation.Resource;
  * @version 1.0
  * @date 2023/2/16
  **/
-@RestController
+//@RestController
+@ResponseBody
 @RequestMapping("/person")
-@Scope(value = "prototype")
+//@Scope(value = "prototype")
 public class PersonController {
 
     @Resource

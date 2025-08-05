@@ -1,11 +1,13 @@
 package com.flyingfish.proxy.proxyclass;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
+@Slf4j
 public class UserServiceProxy implements MethodInterceptor {
 
     private Object object;
@@ -23,10 +25,10 @@ public class UserServiceProxy implements MethodInterceptor {
 
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-        System.out.println("开始事务");
+        log.info("开始事务");
         //调用目标方法
         Object result = method.invoke(o, objects);
-        System.out.println("提交事务");
+        log.info("提交事务");
         return result;
     }
 }
